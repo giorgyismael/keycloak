@@ -1,0 +1,26 @@
+name: Maven CI/CD
+
+# Gatilho que aciona os jobs
+on:
+ push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build_and_test:
+    # Runner consiste na maquina que vai executar o Job e seus Passos
+    runs-on: ubuntu-latest
+    
+    # Passos que devem ser executados
+    steps:
+    - name: Checkout na Branck de destino
+    - uses: actions/checkout@v2
+    
+    - name: Definir versão Java
+      uses: actions/setup-java@v1
+      with:
+        java-version: 17
+
+    - name: Contruit projeto com Maven
+      run: mvn -B package --file pom.xml
