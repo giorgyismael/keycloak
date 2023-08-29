@@ -1,26 +1,26 @@
-name: Maven CI/CD
+name: Integração Contínua
 
-# Gatilho que aciona os jobs
 on:
- push:
-    branches: [ master ]
- pull_request:
-    branches: [ master ]
+  push:
+    branches:
+      - main  # Pode ajustar para a branch desejada
 
 jobs:
-  build_and_test:
-    # Runner consiste na maquina que vai executar o Job e seus Passos
+  build-and-deploy:
+    name: Compilar, Verificar Estilo, Testar e Fazer Deploy
     runs-on: ubuntu-latest
-    
-    # Passos que devem ser executados
-    steps:
-    - name: Checkout na Branck de destino
-    - uses: actions/checkout@v2
-    
-    - name: Definir versão Java
-      uses: actions/setup-java@v1
-      with:
-        java-version: 17
 
-    - name: Contruit projeto com Maven
-      run: mvn -B package --file pom.xml
+    steps:
+    - name: Checkout do código
+      uses: actions/checkout@v2
+
+    - name: Configurar JDK
+      uses: actions/setup-java@v2
+      with:
+        java-version: '17'  # Configura a versão do JDK para Java 17
+
+    - name: Compilar, Verificar Estilo e Testar
+      run: |
+        mvn clean compile
+        mvn checkstyle:checkstyle
+        mvn test
