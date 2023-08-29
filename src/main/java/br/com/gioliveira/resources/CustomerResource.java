@@ -22,8 +22,11 @@ public class CustomerResource {
     @RolesAllowed("manager")
     public List<Customer> custumers(){
         List<Customer> customers = new ArrayList<>();
+        List<Customer> customers2 = new ArrayList<>();
         try{
          customers =  customerService.findAllCustomers();
+         customers2 =  customerService.findAllCustomers();
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
