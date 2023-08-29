@@ -2,21 +2,45 @@ name: Maven CI/CD
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - master
+      - desenvolvimento
     pull_request:
-      branches: [ master ]
+      branches:
+      -  master
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: string
+        default: DEV
+        required: true
 
 jobs:
-  build_and_test:
-
+  prod:
+    if: ${{ github.event_name == 'push' && github.ref_name == 'master' || github.event.inputs.environment == 'PROD' }}
+    env:
+      environment: PROD
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK 14
-        uses: actions/setup-java@v1
-        with:
-          java-version: 14
+      - name: Print value
+        run: echo ${{ env.environment }}
 
-      - name: Build project with Maven
-        run: mvn -B package --file pom.xml
+      - name: Print value
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+            - name: Build with Maven
+              run: mvn -B package --file pom.xml
+  dev:
+    if: ${{ github.event_name == 'push' && github.ref_name == 'development' || github.event.inputs.environment == 'DEV' }}
+    env:
+      environment: DEV
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print value
+        run: echo ${{ env.environment }}
