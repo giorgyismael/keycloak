@@ -3,8 +3,7 @@ name: CI Teste
 on:
   push:
     branches:
-      - master
-      - desenvolvimento
+      - '*'
     pull_request:
       branches:
       -  master
@@ -37,9 +36,25 @@ jobs:
       - name: Build with Maven
         run: mvn -B package --file pom.xml
   dev:
-    if: ${{ github.event_name == 'push' && github.ref_name == 'development' || github.event.inputs.environment == 'DEV' }}
+    if: contains(github.ref, 'issue')
     env:
       environment: DEV
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print value
+        run: echo ${{ env.environment }}
+  tst:
+    if: contains(github.ref, 'entregavel') && contains(github.ref, 'issue')
+    env:
+      environment: TST
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print value
+        run: echo ${{ env.environment }}
+  hotfix:
+    if: contains(github.ref, 'fix')
+    env:
+      environment: FIX
     runs-on: ubuntu-latest
     steps:
       - name: Print value
