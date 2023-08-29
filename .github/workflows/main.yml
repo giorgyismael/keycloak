@@ -25,7 +25,7 @@ jobs:
       - name: Print value
         run: echo ${{ env.environment }}
 
-      - name: Print value
+      - name: Checkout Repositorio
       - uses: actions/checkout@v3
 
       - name: Set up JDK 17
@@ -34,8 +34,8 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
-            - name: Build with Maven
-              run: mvn -B package --file pom.xml
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
   dev:
     if: ${{ github.event_name == 'push' && github.ref_name == 'development' || github.event.inputs.environment == 'DEV' }}
     env:
