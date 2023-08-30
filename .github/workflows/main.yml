@@ -11,10 +11,13 @@ on:
       -  develop
   workflow_dispatch:
     inputs:
-      environment:
-        type: environment
+      environmente:
+        type: string
         default: DEV
         required: true
+      environment:
+          type: environment
+          description: Select the environment
       option:
         description: 'Selecione o Ambiente a ser Aplicado'
         required: true
