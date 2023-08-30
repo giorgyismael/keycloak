@@ -22,7 +22,7 @@ on:
           - PROD
       push_dockerhub:
         type: boolean
-        description: Atualizar imagem Dockerhub
+        description: 'Atualizar imagem Dockerhub'
 
 jobs:
   prod:
