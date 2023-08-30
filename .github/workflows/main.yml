@@ -11,13 +11,6 @@ on:
       -  develop
   workflow_dispatch:
     inputs:
-      environmente:
-        type: string
-        default: DEV
-        required: true
-      environment:
-          type: environment
-          description: Select the environment
       option:
         description: 'Selecione o Ambiente a ser Aplicado'
         required: true
@@ -27,6 +20,9 @@ on:
           - TST
           - RC
           - PROD
+      push_dockerhub:
+        type: boolean
+        description: Atualizar imagem Dockerhub
 
 jobs:
   prod:
