@@ -4,21 +4,30 @@ on:
   push:
     branches:
       - '*'
-    pull_request:
+  pull_request:
       branches:
       -  master
-      -  desenvolvimento
-      -  versao_candidata
+      -  release
+      -  develop
   workflow_dispatch:
     inputs:
       environment:
-        type: string
+        type: select
         default: DEV
         required: true
+      option:
+        description: 'Selecione o Ambiente a ser Aplicado'
+        required: true
+        type: select
+        options:
+          - DEV
+          - TST
+          - RC
+          - PROD
 
 jobs:
   prod:
-    if: ${{ github.event_name == 'push' && github.ref_name == 'master' || github.event.inputs.environment == 'PROD' }}
+    if: ${{ github.event_name == 'push' && github.ref_name == 'master' || github.event.inputs.option == 'PROD' }}
     env:
       environment: PROD
     runs-on: ubuntu-latest
@@ -38,7 +47,7 @@ jobs:
       - name: Build with Maven
         run: mvn -B package --file pom.xml
   dev:
-    if: contains(github.ref, 'issue') || github.event.inputs.environment == 'DEV'
+    if: contains(github.ref, 'issue') || github.event.inputs.option == 'DEV'
     env:
       environment: DEV
     runs-on: ubuntu-latest
@@ -46,7 +55,7 @@ jobs:
       - name: Print value
         run: echo ${{ env.environment }}
   tst:
-    if: (contains(github.ref, 'entregavel') && contains(github.ref, 'issue')) || github.event.inputs.environment == 'TST'
+    if: (contains(github.ref, 'entregavel') && contains(github.ref, 'issue')) || github.event.inputs.option == 'TST'
     env:
       environment: TST
     runs-on: ubuntu-latest
@@ -54,7 +63,7 @@ jobs:
       - name: Print value
         run: echo ${{ env.environment }}
   hotfix:
-    if: contains(github.ref, 'fix') || github.event.inputs.environment == 'HOTFIX'
+    if: contains(github.ref, 'fix') || github.event.inputs.option == 'HOTFIX'
     env:
       environment: HOTFIX
     runs-on: ubuntu-latest
