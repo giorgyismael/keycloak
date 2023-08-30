@@ -12,13 +12,13 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        type: select
+        type: environment
         default: DEV
         required: true
       option:
         description: 'Selecione o Ambiente a ser Aplicado'
         required: true
-        type: select
+        type: choice
         options:
           - DEV
           - TST
